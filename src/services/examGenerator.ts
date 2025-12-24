@@ -26,6 +26,9 @@ Rules:
 - Exactly one correct answer
 - Explanations must be based ONLY on the source text (no external knowledge)
 - Language: Hebrew for question/choices/explanation
+- IMPORTANT: Do NOT mention the source text in the question or explanation.
+  Do NOT use phrases like "לפי הטקסט", "בהתבסס על הטקסט", "מהטקסט", "על פי הקטע".
+  Just ask the question directly.
 
 JSON schema:
 {

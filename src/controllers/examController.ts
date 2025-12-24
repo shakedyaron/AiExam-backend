@@ -3,6 +3,15 @@ import { parseUploadedFile } from "../services/fileParser";
 import { generateExamFromText } from "../services/examGenerator";
 import { GenerateExamDTO } from "../validator/examSchemas";
 
+const DEMO_TEXT = `
+כדור הארץ מחולק לשבע יבשות: אסיה, אפריקה, אירופה, אמריקה הצפונית,
+אמריקה הדרומית, אוסטרליה ואנטארקטיקה.
+האוקיינוס השקט הוא האוקיינוס הגדול ביותר בעולם.
+נהר הנילוס נחשב לאחד הנהרות הארוכים בעולם.
+מדבר הסהרה הוא המדבר החם הגדול ביותר בכדור הארץ.
+רוב אוכלוסיית העולם מתגוררת ביבשת אסיה.
+`;
+
 export async function uploadPreview(req: Request, res: Response) {
   try {
     if (!req.file) return res.status(400).json({ error: "Missing file" });
@@ -54,6 +63,23 @@ export async function generateExam(req: Request, res: Response) {
 
     const exam = await generateExamFromText({
       text,
+      numQuestions,
+      difficulty,
+    });
+
+    return res.json(exam);
+  } catch (err: any) {
+    return res.status(500).json({ error: err?.message ?? "Unknown error" });
+  }
+}
+
+export async function generateDemoExam(req: Request, res: Response) {
+  try {
+    const { numQuestions, difficulty } = (req as any)
+      .validatedBody as GenerateExamDTO;
+
+    const exam = await generateExamFromText({
+      text: DEMO_TEXT,
       numQuestions,
       difficulty,
     });
