@@ -19,8 +19,9 @@ const pdfParse = (() => {
 
 export async function parseUploadedFile(file: MulterFile): Promise<string> {
   const ext = path.extname(file.originalname).toLowerCase();
-  const buffer = await fs.readFile(file.path);
-  await fs.unlink(file.path).catch(() => {}); // cleanup
+  const buffer = await fs.readFile(file.path).finally(() =>
+    fs.unlink(file.path).catch(() => {}),
+  );
 
   if (file.mimetype === "application/pdf" || ext === ".pdf") {
     const data = await pdfParse(buffer);
@@ -49,7 +50,6 @@ export async function parseMultipleFilesAsArray(files: MulterFile[]): Promise<st
       else console.warn(`[parseMultipleFilesAsArray] empty text extracted from: ${file.originalname}`);
     } catch (err) {
       console.warn(`[parseMultipleFilesAsArray] failed to parse ${file.originalname}:`, err);
-      await fs.unlink(file.path).catch(() => {});
     }
   }
 
