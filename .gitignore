@@ -27,3 +27,6 @@ Thumbs.db
 
 # Vite cache
 .vite/
+
+# Temporary uploaded files
+uploads/
