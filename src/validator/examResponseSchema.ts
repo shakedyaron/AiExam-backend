@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ChoiceSchema = z.object({
   key: z.enum(["A", "B", "C", "D"]),
-  text: z.string().min(1)
+  text: z.string().min(1),
 });
 
 export const MCQQuestionSchema = z.object({
@@ -11,13 +11,26 @@ export const MCQQuestionSchema = z.object({
   question: z.string().min(1),
   choices: z.array(ChoiceSchema).length(4),
   correctKey: z.enum(["A", "B", "C", "D"]),
-  explanation: z.string().min(1)
+  explanation: z.string().min(1),
 });
+
+export const OpenQuestionSchema = z.object({
+  id: z.string().min(1),
+  type: z.literal("open"),
+  question: z.string().min(1),
+  keyPoints: z.array(z.string().min(1)).min(1).max(5),
+  modelAnswer: z.string().min(1),
+});
+
+export const QuestionSchema = z.discriminatedUnion("type", [
+  MCQQuestionSchema,
+  OpenQuestionSchema,
+]);
 
 export const ExamResponseSchema = z.object({
   title: z.string().min(1),
   difficulty: z.enum(["easy", "medium", "hard"]),
-  questions: z.array(MCQQuestionSchema).min(1).max(30)
+  questions: z.array(QuestionSchema).min(1).max(30),
 });
 
 export type ExamResponse = z.infer<typeof ExamResponseSchema>;
