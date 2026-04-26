@@ -4,7 +4,11 @@ import cors from "cors";
 import examRoutes from "./routes/examRoute";
 
 // Fail fast if critical env vars are missing
-const REQUIRED_ENV = ["OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"] as const;
+const REQUIRED_ENV = [
+  "OPENAI_API_KEY",
+  "SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+] as const;
 for (const key of REQUIRED_ENV) {
   if (!process.env[key]) throw new Error(`Missing required env var: ${key}`);
 }
@@ -26,6 +30,13 @@ app.use(
 );
 
 app.use(express.json({ limit: "2mb" }));
+
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "AI Exam Backend is running",
+  });
+});
 
 app.use("/api/exam", examRoutes);
 
