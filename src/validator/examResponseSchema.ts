@@ -30,7 +30,7 @@ export const QuestionSchema = z.discriminatedUnion("type", [
 export const ExamResponseSchema = z.object({
   title: z.string().min(1),
   difficulty: z.enum(["easy", "medium", "hard"]),
-  questions: z.array(QuestionSchema).min(1).max(30),
+  questions: z.array(QuestionSchema).min(1).max(50),
 });
 
 export type ExamResponse = z.infer<typeof ExamResponseSchema>;

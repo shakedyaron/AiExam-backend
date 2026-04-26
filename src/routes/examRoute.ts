@@ -11,7 +11,10 @@ import { requireAuth } from "../middlewares/auth";
 import { checkUsageLimit } from "../middlewares/usageLimit";
 
 const router = Router();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB per file
+});
 
 // Public
 router.post("/upload", upload.array("files", 5), uploadPreview);
